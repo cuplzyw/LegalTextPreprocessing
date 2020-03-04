@@ -199,4 +199,586 @@ def test_prf(pred, labels):
     print( "    Precision: %s\n    Recall   : %s\n    F1 score : %s\n    Macro F1 score on test (Neg|Neu|Pos) is %f" %(p, r, f1, macro_f1))
     return accuracy
     
-    
+x_igr=vsmtf_common_words_igr_selected
+x_train=x_igr[0:880]
+x_test=x_igr[880:1103]
+y_train=np.zeros(880)
+for i in range(320):
+    y_train[i]=1
+
+y_test=np.zeros(223)
+for i in range(84):
+    y_test[i]=1
+
+doc_term_matrix_train_vec=x_train
+doc_term_matrix_test_vec=x_test
+
+linear_svc=SVC(kernel='linear',gamma='auto')
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict=linear_svc.predict(doc_term_matrix_test_vec)
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+linear_svc=SVC(kernel='linear',probability=True,gamma='auto')
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict_proba_vec=linear_svc.predict_proba(doc_term_matrix_test_vec)
+y_predict_proba_1_vec=np.zeros((len(y_predict_proba_vec),1))
+for i in range(len(y_predict_proba_1_vec)):
+    y_predict_proba_1_vec[i]=y_predict_proba_vec[i][1]
+
+igr_auc=roc_auc_score(y_test,y_predict_proba_1_vec)
+igr_auc
+
+y_predict=np.zeros(len(y_predict_proba_1_vec))
+for i in range(len(y_predict)):
+    if y_predict_proba_1_vec[i][0]>0.5:
+        y_predict[i]=1
+
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+################################################################## validation 112
+x_igr=vsmtf_common_words_igr_selected
+
+x_train=x_igr[0:880]
+x_validation_positive=x_igr[880:922]
+x_validation_negative=x_igr[964:1034]
+x_validation=np.vstack((x_validation_positive,x_validation_negative))
+x_test=x_validation
+
+######################################################################################################## feature 259
+estimator=PCA(n_components=259,svd_solver='arpack')
+x_pca=estimator.fit_transform(vsmtf_common_words_igr_selected)
+x_train=x_pca[0:880]
+x_test=x_pca[880:1103]
+y_train=np.zeros(880)
+for i in range(320):
+    y_train[i]=1
+
+y_test=np.zeros(223)
+for i in range(84):
+    y_test[i]=1
+
+
+doc_term_matrix_train_vec=x_train
+doc_term_matrix_test_vec=x_test
+linear_svc=SVC(kernel='linear')
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict=linear_svc.predict(doc_term_matrix_test_vec)
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+linear_svc=SVC(kernel='linear',probability=True)
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict_proba_vec=linear_svc.predict_proba(doc_term_matrix_test_vec)
+y_predict_proba_1_vec=np.zeros((len(y_predict_proba_vec),1))
+for i in range(len(y_predict_proba_1_vec)):
+    y_predict_proba_1_vec[i]=y_predict_proba_vec[i][1]
+
+igr_auc=roc_auc_score(y_test,y_predict_proba_1_vec)
+igr_auc
+y_train=np.zeros(880)
+for i in range(320):
+    y_train[i]=1
+
+y_validation=np.zeros(112)
+for i in range(42):
+    y_validation[i]=1
+
+y_test=y_validation
+
+doc_term_matrix_train_vec=x_train
+doc_term_matrix_test_vec=x_test
+
+linear_svc=SVC(kernel='linear',gamma='auto')
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict=linear_svc.predict(doc_term_matrix_test_vec)
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+linear_svc=SVC(kernel='linear',probability=True,gamma='auto')
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict_proba_vec=linear_svc.predict_proba(doc_term_matrix_test_vec)
+y_predict_proba_1_vec=np.zeros((len(y_predict_proba_vec),1))
+for i in range(len(y_predict_proba_1_vec)):
+    y_predict_proba_1_vec[i]=y_predict_proba_vec[i][1]
+
+igr_auc=roc_auc_score(y_test,y_predict_proba_1_vec)
+igr_auc
+
+y_predict=np.zeros(len(y_predict_proba_1_vec))
+for i in range(len(y_predict)):
+    if y_predict_proba_1_vec[i][0]>0.5:
+        y_predict[i]=1
+
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+################################################################## test 111
+x_igr=vsmtf_common_words_igr_selected
+
+x_train=x_igr[0:880]
+x_test_positive=x_igr[922:964]
+x_test_negative=x_igr[1034:1103]
+x_test=np.vstack((x_test_positive,x_test_negative))
+
+y_train=np.zeros(880)
+for i in range(320):
+    y_train[i]=1
+
+y_test=np.zeros(111)
+for i in range(42):
+    y_test[i]=1
+
+doc_term_matrix_train_vec=x_train
+doc_term_matrix_test_vec=x_test
+
+linear_svc=SVC(kernel='linear',gamma='auto')
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict=linear_svc.predict(doc_term_matrix_test_vec)
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+linear_svc=SVC(kernel='linear',probability=True,gamma='auto')
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict_proba_vec=linear_svc.predict_proba(doc_term_matrix_test_vec)
+y_predict_proba_1_vec=np.zeros((len(y_predict_proba_vec),1))
+for i in range(len(y_predict_proba_1_vec)):
+    y_predict_proba_1_vec[i]=y_predict_proba_vec[i][1]
+
+igr_auc=roc_auc_score(y_test,y_predict_proba_1_vec)
+igr_auc
+
+y_predict=np.zeros(len(y_predict_proba_1_vec))
+for i in range(len(y_predict)):
+    if y_predict_proba_1_vec[i][0]>0.5:
+        y_predict[i]=1
+
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+y_predict=np.zeros(len(y_predict_proba_1_vec))
+for i in range(len(y_predict)):
+    if y_predict_proba_1_vec[i][0]>0.5:
+        y_predict[i]=1
+
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+################################################################## validation 112
+estimator=PCA(n_components=259,svd_solver='arpack')
+x_pca=estimator.fit_transform(vsmtf_common_words_igr_selected)
+
+x_train=x_pca[0:880]
+x_validation_positive=x_pca[880:922]
+x_validation_negative=x_pca[964:1034]
+x_validation=np.vstack((x_validation_positive,x_validation_negative))
+x_test=x_validation
+
+y_train=np.zeros(880)
+for i in range(320):
+    y_train[i]=1
+
+y_validation=np.zeros(112)
+for i in range(42):
+    y_validation[i]=1
+
+y_test=y_validation
+
+
+doc_term_matrix_train_vec=x_train
+doc_term_matrix_test_vec=x_test
+linear_svc=SVC(kernel='linear')
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict=linear_svc.predict(doc_term_matrix_test_vec)
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+linear_svc=SVC(kernel='linear',probability=True)
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict_proba_vec=linear_svc.predict_proba(doc_term_matrix_test_vec)
+y_predict_proba_1_vec=np.zeros((len(y_predict_proba_vec),1))
+for i in range(len(y_predict_proba_1_vec)):
+    y_predict_proba_1_vec[i]=y_predict_proba_vec[i][1]
+
+igr_auc=roc_auc_score(y_test,y_predict_proba_1_vec)
+igr_auc
+
+y_predict=np.zeros(len(y_predict_proba_1_vec))
+for i in range(len(y_predict)):
+    if y_predict_proba_1_vec[i][0]>0.5:
+        y_predict[i]=1
+
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+################################################################## test 111
+estimator=PCA(n_components=259,svd_solver='arpack')
+x_pca=estimator.fit_transform(vsmtf_common_words_igr_selected)
+
+x_train=x_pca[0:880]
+x_test_positive=x_pca[922:964]
+x_test_negative=x_pca[1034:1103]
+x_test=np.vstack((x_test_positive,x_test_negative))
+
+y_train=np.zeros(880)
+for i in range(320):
+    y_train[i]=1
+
+y_test=np.zeros(111)
+for i in range(42):
+    y_test[i]=1
+
+
+doc_term_matrix_train_vec=x_train
+doc_term_matrix_test_vec=x_test
+linear_svc=SVC(kernel='linear')
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict=linear_svc.predict(doc_term_matrix_test_vec)
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+linear_svc=SVC(kernel='linear',probability=True)
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict_proba_vec=linear_svc.predict_proba(doc_term_matrix_test_vec)
+y_predict_proba_1_vec=np.zeros((len(y_predict_proba_vec),1))
+for i in range(len(y_predict_proba_1_vec)):
+    y_predict_proba_1_vec[i]=y_predict_proba_vec[i][1]
+
+igr_auc=roc_auc_score(y_test,y_predict_proba_1_vec)
+igr_auc
+
+y_predict=np.zeros(len(y_predict_proba_1_vec))
+for i in range(len(y_predict)):
+    if y_predict_proba_1_vec[i][0]>0.5:
+        y_predict[i]=1
+
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+######################################################################################################## feature 1102
+################################################################## test 223
+estimator=PCA(n_components=1102,svd_solver='arpack')
+x_pca=estimator.fit_transform(vsmtf_common_words_igr_selected)
+x_train=x_pca[0:880]
+x_test=x_pca[880:1103]
+y_train=np.zeros(880)
+for i in range(320):
+    y_train[i]=1
+
+y_test=np.zeros(223)
+for i in range(84):
+    y_test[i]=1
+
+
+doc_term_matrix_train_vec=x_train
+doc_term_matrix_test_vec=x_test
+linear_svc=SVC(kernel='linear')
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict=linear_svc.predict(doc_term_matrix_test_vec)
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+linear_svc=SVC(kernel='linear',probability=True)
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict_proba_vec=linear_svc.predict_proba(doc_term_matrix_test_vec)
+y_predict_proba_1_vec=np.zeros((len(y_predict_proba_vec),1))
+for i in range(len(y_predict_proba_1_vec)):
+    y_predict_proba_1_vec[i]=y_predict_proba_vec[i][1]
+
+igr_auc=roc_auc_score(y_test,y_predict_proba_1_vec)
+igr_auc
+
+y_predict=np.zeros(len(y_predict_proba_1_vec))
+for i in range(len(y_predict)):
+    if y_predict_proba_1_vec[i][0]>0.5:
+        y_predict[i]=1
+
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+################################################################## validation 112
+estimator=PCA(n_components=800,svd_solver='arpack')
+x_pca=estimator.fit_transform(vsmtf_common_words_igr_selected)
+
+x_train=x_pca[0:880]
+x_validation_positive=x_pca[880:922]
+x_validation_negative=x_pca[964:1034]
+x_validation=np.vstack((x_validation_positive,x_validation_negative))
+x_test=x_validation
+
+y_train=np.zeros(880)
+for i in range(320):
+    y_train[i]=1
+
+y_validation=np.zeros(112)
+for i in range(42):
+    y_validation[i]=1
+
+y_test=y_validation
+
+
+doc_term_matrix_train_vec=x_train
+doc_term_matrix_test_vec=x_test
+linear_svc=SVC(kernel='linear')
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict=linear_svc.predict(doc_term_matrix_test_vec)
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+linear_svc=SVC(kernel='linear',probability=True)
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict_proba_vec=linear_svc.predict_proba(doc_term_matrix_test_vec)
+y_predict_proba_1_vec=np.zeros((len(y_predict_proba_vec),1))
+for i in range(len(y_predict_proba_1_vec)):
+    y_predict_proba_1_vec[i]=y_predict_proba_vec[i][1]
+
+igr_auc=roc_auc_score(y_test,y_predict_proba_1_vec)
+igr_auc
+
+y_predict=np.zeros(len(y_predict_proba_1_vec))
+for i in range(len(y_predict)):
+    if y_predict_proba_1_vec[i][0]>0.5:
+        y_predict[i]=1
+
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+################################################################## test 111
+estimator=PCA(n_components=1102,svd_solver='arpack')
+x_pca=estimator.fit_transform(vsmtf_common_words_igr_selected)
+
+x_train=x_pca[0:880]
+x_test_positive=x_pca[922:964]
+x_test_negative=x_pca[1034:1103]
+x_test=np.vstack((x_test_positive,x_test_negative))
+
+y_train=np.zeros(880)
+for i in range(320):
+    y_train[i]=1
+
+y_test=np.zeros(111)
+for i in range(42):
+    y_test[i]=1
+
+
+doc_term_matrix_train_vec=x_train
+doc_term_matrix_test_vec=x_test
+linear_svc=SVC(kernel='linear')
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict=linear_svc.predict(doc_term_matrix_test_vec)
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+linear_svc=SVC(kernel='linear',probability=True)
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict_proba_vec=linear_svc.predict_proba(doc_term_matrix_test_vec)
+y_predict_proba_1_vec=np.zeros((len(y_predict_proba_vec),1))
+for i in range(len(y_predict_proba_1_vec)):
+    y_predict_proba_1_vec[i]=y_predict_proba_vec[i][1]
+
+igr_auc=roc_auc_score(y_test,y_predict_proba_1_vec)
+igr_auc
+
+y_predict=np.zeros(len(y_predict_proba_1_vec))
+for i in range(len(y_predict)):
+    if y_predict_proba_1_vec[i][0]>0.5:
+        y_predict[i]=1
+
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+os.chdir('/home/zzqzyq/Downloads/dataset/preprocessing_CJO')
+
+indptr=[0]
+indices=[]
+data=[]
+vocabulary={}
+with codecs.open('CJO_word_cut_1103_K300_tf_legalterms.txt',encoding='utf-8',errors='ignore') as onetxt:
+    abcdlines=onetxt.readlines()
+    alist=abcdlines[0:320]
+    blist=abcdlines[404:964]
+    clist=abcdlines[320:404]
+    dlist=abcdlines[964:1103]
+    ablist=alist+blist
+    cdlist=clist+dlist
+    lines=ablist+cdlist
+    for line in lines:
+        items=line.strip('\r\n').split('\t')
+        for item in items:
+            wordc=re.findall('(\w+):',item)
+            if len(wordc)==0:
+                continue
+            else:
+                word=wordc[0]
+            freqc=re.findall(':(\d+)',item)
+            if len(freqc)==0:
+                continue
+            else:
+                freq=int(freqc[0])
+            for i in range(freq):
+                index=vocabulary.setdefault(word,len(vocabulary))
+                indices.append(index)
+                data.append(1)
+        indptr.append(len(indices))
+
+vsmtf_legal_terms=csr_matrix((data,indices,indptr),dtype=int).toarray()
+
+######################################################################################################## feature 1154+top 800 pcson commonwords
+################################################################## test 223
+estimator=PCA(n_components=800,svd_solver='arpack')
+x_pca_common_wrods=estimator.fit_transform(vsmtf_common_words_igr_selected)
+x_pca=np.hstack((vsmtf_legal_terms,x_pca_common_wrods))
+x_train=x_pca[0:880]
+x_test=x_pca[880:1103]
+y_train=np.zeros(880)
+for i in range(320):
+    y_train[i]=1
+
+y_test=np.zeros(223)
+for i in range(84):
+    y_test[i]=1
+
+
+doc_term_matrix_train_vec=x_train
+doc_term_matrix_test_vec=x_test
+linear_svc=SVC(kernel='linear')
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict=linear_svc.predict(doc_term_matrix_test_vec)
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+linear_svc=SVC(kernel='linear',probability=True)
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict_proba_vec=linear_svc.predict_proba(doc_term_matrix_test_vec)
+y_predict_proba_1_vec=np.zeros((len(y_predict_proba_vec),1))
+for i in range(len(y_predict_proba_1_vec)):
+    y_predict_proba_1_vec[i]=y_predict_proba_vec[i][1]
+
+igr_auc=roc_auc_score(y_test,y_predict_proba_1_vec)
+igr_auc
+y_predict=np.zeros(len(y_predict_proba_1_vec))
+for i in range(len(y_predict)):
+    if y_predict_proba_1_vec[i][0]>0.5:
+        y_predict[i]=1
+
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+################################################################## validation 112
+estimator=PCA(n_components=800,svd_solver='arpack')
+x_pca_common_wrods=estimator.fit_transform(vsmtf_common_words_igr_selected)
+x_pca=np.hstack((vsmtf_legal_terms,x_pca_common_wrods))
+
+x_train=x_pca[0:880]
+x_validation_positive=x_pca[880:922]
+x_validation_negative=x_pca[964:1034]
+x_validation=np.vstack((x_validation_positive,x_validation_negative))
+x_test=x_validation
+
+y_train=np.zeros(880)
+for i in range(320):
+    y_train[i]=1
+
+y_validation=np.zeros(112)
+for i in range(42):
+    y_validation[i]=1
+
+y_test=y_validation
+
+
+doc_term_matrix_train_vec=x_train
+doc_term_matrix_test_vec=x_test
+linear_svc=SVC(kernel='linear')
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict=linear_svc.predict(doc_term_matrix_test_vec)
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+linear_svc=SVC(kernel='linear',probability=True)
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict_proba_vec=linear_svc.predict_proba(doc_term_matrix_test_vec)
+y_predict_proba_1_vec=np.zeros((len(y_predict_proba_vec),1))
+for i in range(len(y_predict_proba_1_vec)):
+    y_predict_proba_1_vec[i]=y_predict_proba_vec[i][1]
+
+igr_auc=roc_auc_score(y_test,y_predict_proba_1_vec)
+igr_auc
+
+y_predict=np.zeros(len(y_predict_proba_1_vec))
+for i in range(len(y_predict)):
+    if y_predict_proba_1_vec[i][0]>0.5:
+        y_predict[i]=1
+
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+################################################################## test 111
+estimator=PCA(n_components=800,svd_solver='arpack')
+x_pca_common_wrods=estimator.fit_transform(vsmtf_common_words_igr_selected)
+x_pca=np.hstack((vsmtf_legal_terms,x_pca_common_wrods))
+
+x_train=x_pca[0:880]
+x_test_positive=x_pca[922:964]
+x_test_negative=x_pca[1034:1103]
+x_test=np.vstack((x_test_positive,x_test_negative))
+
+y_train=np.zeros(880)
+for i in range(320):
+    y_train[i]=1
+
+y_test=np.zeros(111)
+for i in range(42):
+    y_test[i]=1
+
+
+doc_term_matrix_train_vec=x_train
+doc_term_matrix_test_vec=x_test
+linear_svc=SVC(kernel='linear')
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict=linear_svc.predict(doc_term_matrix_test_vec)
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+linear_svc=SVC(kernel='linear',probability=True)
+linear_svc.fit(doc_term_matrix_train_vec,y_train)
+y_predict_proba_vec=linear_svc.predict_proba(doc_term_matrix_test_vec)
+y_predict_proba_1_vec=np.zeros((len(y_predict_proba_vec),1))
+for i in range(len(y_predict_proba_1_vec)):
+    y_predict_proba_1_vec[i]=y_predict_proba_vec[i][1]
+
+igr_auc=roc_auc_score(y_test,y_predict_proba_1_vec)
+igr_auc
+
+y_predict=np.zeros(len(y_predict_proba_1_vec))
+for i in range(len(y_predict)):
+    if y_predict_proba_1_vec[i][0]>0.5:
+        y_predict[i]=1
+
+y_predict=y_predict.astype(np.int64)
+y_test=y_test.astype(np.int64)
+accurancy=test_prf(y_predict,y_test)
+
+
+
+
