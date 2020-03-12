@@ -12,7 +12,7 @@ from scipy.sparse import csr_matrix
 import jieba.analyse
 import re
 import math
-############################################################################################################################################### evaluation function
+######## evaluation function
 def cal_prf(pred, right, gold, formation=True, metric_type=""):
     """
     :param pred: predicted labels
@@ -75,7 +75,7 @@ def test_prf(pred, labels):
     print( "    Accuracy on test is %d/%d = %f" % (sum(pred_right), total, accuracy))
     print( "    Precision: %s\n    Recall   : %s\n    F1 score : %s\n    Macro F1 score on test (Neg|Neu|Pos) is %f" %(p, r, f1, macro_f1))
     return accuracy
-############################################################################################################################################### build vector space model of legal terms
+######## build vector space model of legal terms
 os.chdir('/home/zzqzyq/Downloads/dataset/preprocessing_CJO')
 
 indptr=[0]
@@ -112,7 +112,7 @@ with codecs.open('CJO_word_cut_1103_K300_tf_legalterms.txt',encoding='utf-8',err
 
 vsmtf_legal_terms=csr_matrix((data,indices,indptr),dtype=int).toarray()
 vsmtf_legal_terms.shape
-############################################################################################################################################### build vector space model of common words
+######## build vector space model of common words
 os.chdir('/home/zzqzyq/Downloads/dataset/preprocessing_CJO')
 indptr=[0]
 indices=[]
@@ -148,7 +148,7 @@ with codecs.open('CJO_word_cut_1103_K300_tf_commonwords.txt',encoding='utf-8',er
 
 vsmtf_common_words=csr_matrix((data,indices,indptr),dtype=int).toarray()
 vsmtf_common_words.shape
-###############################################################################################################################################the sum of features is 1154
+########the sum of features is 1154
 x_sm_legalterms=vsmtf_legal_terms
 x_train=x_sm_legalterms[0:880]
 x_test=x_sm_legalterms[880:1103]
@@ -244,7 +244,7 @@ for i in range(len(y_predict)):
 y_predict=y_predict.astype(np.int64)
 y_test=y_test.astype(np.int64)
 accurancy=test_prf(y_predict,y_test)
-############################################################################################################################################### the sum of features is 41623 
+######## the sum of features is 41623 
 x_sm_commonwords=vsmtf_common_words
 x_train=x_sm_commonwords[0:880]
 x_test=x_sm_commonwords[880:1103]
@@ -338,7 +338,7 @@ for i in range(len(y_predict)):
 y_predict=y_predict.astype(np.int64)
 y_test=y_test.astype(np.int64)
 accurancy=test_prf(y_predict,y_test)
-############################################################################################################################################### the sum of features is 42777
+######## the sum of features is 42777
 x_sm=np.hstack((vsmtf_legal_terms,vsmtf_common_words))
 x_train=x_sm[0:880]
 x_test=x_sm[880:1103]
@@ -428,7 +428,7 @@ for i in range(len(y_predict)):
 y_predict=y_predict.astype(np.int64)
 y_test=y_test.astype(np.int64)
 accurancy=test_prf(y_predict,y_test)
-############################################################################################################################################### calculate the imbalance of each feature
+######## calculate the imbalance of each feature
 vsmtf_common_words_positive=vsmtf_common_words[0:320]
 vsmtf_common_words_negative=vsmtf_common_words[320:880]
 vsmtf_common_words_positive_T=vsmtf_common_words_positive.T
@@ -520,7 +520,7 @@ with codecs.open('CJO_word_cut_1103_K300_tf_commonwords.txt','r',encoding='utf-8
 vsmtf_commonwords_imbalance_selected=csr_matrix((data, indices, indptr), dtype=int).toarray()
 vsmtf_commonwords_imbalance_selected.shape
 
-############################################################################################################################################### the sum of features is 7779(1154+6625)
+######## the sum of features is 7779(1154+6625)
 
 x_imb=np.hstack((vsmtf_legal_terms,vsmtf_commonwords_imbalance_selected))
 x_train=x_imb[0:880]
