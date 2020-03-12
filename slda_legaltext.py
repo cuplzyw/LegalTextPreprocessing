@@ -12,6 +12,7 @@ from sklearn.metrics import (roc_curve,roc_auc_score)
 from slda.topic_models import LDA
 from slda.topic_models import BLSLDA
 from sklearn.linear_model import LinearRegression
+from dc_weight import dc_weight
 
 os.chdir('/home/zzqzyq/Downloads/dataset/preprocessing_FCA')
 indptr=[0]
@@ -784,9 +785,9 @@ voca = vocafreq.keys()
 package["voca"] = voca
 
 os.chdir('/home/zzqzyq/Downloads/dataset/preprocessing_FCA')
-from tf_idf import tf_idf
+from dc_weight import dc_weight
 test=0
-weights = tf_idf(corpus,test,package,vsmtf_legal_terms,legal_terms_vocabulary_indataset)
+weights = dc_weight(corpus,test,package,vsmtf_legal_terms,legal_terms_vocabulary_indataset)
 
 vsmtf_legal_terms_weighted=np.zeros(vsmtf_legal_terms.shape)
 doccount = {}
