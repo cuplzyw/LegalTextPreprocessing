@@ -14,15 +14,6 @@ import re
 import math
 ######## evaluation function
 def cal_prf(pred, right, gold, formation=True, metric_type=""):
-    """
-    :param pred: predicted labels
-    :param right: predicting right labels
-    :param gold: gold labels
-    :param formation: whether format the float to 6 digits
-    :param metric_type:
-    :return: prf for each label
-    """
-    """ Pred: [0, 2905, 0]  Right: [0, 2083, 0]  Gold: [370, 2083, 452] """
     num_class = len(pred)
     precision = [0.0] * num_class
     recall = [0.0] * num_class
@@ -52,10 +43,6 @@ def cal_prf(pred, right, gold, formation=True, metric_type=""):
 
 
 def test_prf(pred, labels):
-    """
-    4. log and return prf scores
-    :return:
-    """
     total = len(labels)
     pred_right = [0, 0]
     pred_all = [0, 0]
